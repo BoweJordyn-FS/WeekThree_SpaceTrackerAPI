@@ -2,13 +2,12 @@ services:
   wdv442-mysql:
     image: mysql:latest
     restart: always
-    networks: 
+    networks:
       - wdv442
     volumes:
       - ./var:/var/lib/mysql
     # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
     # (this is just an example, not intended to be a production configuration)
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: asl
@@ -16,7 +15,6 @@ services:
       MYSQL_DATABASE: wdv442_space_tracker
   wdv442-node:
     image: node:latest
-    user: node
     working_dir: /home/node/app
     networks:
       - wdv442
@@ -25,7 +23,7 @@ services:
     volumes:
       - ./:/home/node/app
     ports:
-      - "3000:3000"
+      - '3000:3000'
     command: >
       sh -c "rm -rf node_modules &&
              npm install &&
@@ -37,4 +35,3 @@ services:
       - wdv442-mysql
 networks:
   wdv442:
-

@@ -1,0 +1,23 @@
+{
+	"development": {
+		"username": "root",
+		"password": "root",
+		"database": "asl_db",
+		"host": "wdv442-mysql",
+		"dialect": "mysql"
+	},
+	"test": {
+		"username": "root",
+		"password": "root",
+		"database": "asl_db",
+		"host": "wdv442-mysql",
+		"dialect": "mysql"
+	},
+	"production": {
+		"username": "root",
+		"password": "root",
+		"database": "asl_db",
+		"host": "wdv442-mysql",
+		"dialect": "mysql"
+	}
+}
