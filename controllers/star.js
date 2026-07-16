@@ -1,31 +1,47 @@
+const { Star } = require('../models');
+
 // Show all resources
-const index = (req, res) => {
+const index = async (req, res) => {
   // Respond with an array and 2xx status code
-  res.status(200).json([`Star#index`])
+  const stars = await Star.findAll();
+  res.status(200).json(stars);
 }
+
 
 // Show resource
-const show = (req, res) => {
+const show = async (req, res) => {
   // Respond with a single object and 2xx code
-  res.status(200).json(`Star#show(:id)`)
-}
+  const star = await Star.findByPk(req.params.id);
+  res.status(200).json(star);
+};
 
 // Create a new resource
-const create = (req, res) => {
+const create = async (req, res) => {
   // Issue a redirect with a success 2xx code
-  res.redirect(`/stars`, 201)
-}
+  const star = await Star.create(req.body);
+  res.redirect(201, `/stars/${star.id}`);
+};
 
 // Update an existing resource
-const update = (req, res) => {
+const update = async (req, res) => {
   // Respond with a single resource and 2xx code
-  res.status(200).json(`/stars/${req.params.id}`, )
-}
+  const star = await Star.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.status(202).json(star);
+};
 
 // Remove a single resource
-const remove = (req, res) => {
+const remove = async (req, res) => {
   // Respond with a 2xx status code and bool
-  res.status(204).json(true)
+  const deleted = await Star.destroy({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.status(200).json(deleted);
 }
 
 // Export all controller actions
