@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			models.Star.belongsTo(models.Galaxy);
-			models.Star.hasMany(models.Planets, { foreignKey: 'starId' });
+			models.Star.belongsTo(models.Galaxy, { foreignKey: 'galaxyId' });
+			models.Star.belongsToMany(models.Planets, { through: models.StarsPlanets, foreignKey: 'starId' });
 		}
 	}
 	Star.init(

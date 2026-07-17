@@ -1,27 +1,30 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-	class Galaxy extends Model {
+	class StarsPlanets extends Model {
 		/**
 		 * Helper method for defining associations.
 		 * This method is not a part of Sequelize lifecycle.
 		 * The `models/index` file will call this method automatically.
 		 */
 		static associate(models) {
-			// define association here
-			models.Galaxy.hasMany(models.Star, { foreignKey: 'galaxyId' });
+			// join table - no additional associations needed
 		}
 	}
-	Galaxy.init(
+	StarsPlanets.init(
 		{
-			name: DataTypes.STRING,
-			size: DataTypes.INTEGER,
-			description: DataTypes.TEXT,
+			id: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				autoIncrement: true,
+			},
+			starId: DataTypes.INTEGER,
+			planetId: DataTypes.INTEGER,
 		},
 		{
 			sequelize,
-			modelName: 'Galaxy',
+			modelName: 'StarsPlanets',
 		},
 	);
-	return Galaxy;
+	return StarsPlanets;
 };

@@ -21,6 +21,7 @@ module.exports = {
 			galaxyId: {
 				type: Sequelize.INTEGER,
 			},
+
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

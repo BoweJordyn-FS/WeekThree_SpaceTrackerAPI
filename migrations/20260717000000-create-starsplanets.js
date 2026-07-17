@@ -2,21 +2,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('Planets', {
+		await queryInterface.createTable('StarsPlanets', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			name: {
-				type: Sequelize.STRING,
-			},
-			size: {
+			starId: {
 				type: Sequelize.INTEGER,
 			},
-			description: {
-				type: Sequelize.TEXT,
+			planetId: {
+				type: Sequelize.INTEGER,
 			},
 			createdAt: {
 				allowNull: false,
@@ -29,6 +26,6 @@ module.exports = {
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('Planets');
+		await queryInterface.dropTable('StarsPlanets');
 	},
 };
