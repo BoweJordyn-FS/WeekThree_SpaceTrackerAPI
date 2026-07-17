@@ -12,6 +12,8 @@ const index = async (req, res) => {
 const show = async (req, res) => {
   // Respond with a single object and 2xx code
   const star = await Star.findByPk(req.params.id);
+  const planets = await star.getPlanets();
+  star.dataValues.planets = planets;
   res.status(200).json(star);
 };
 
