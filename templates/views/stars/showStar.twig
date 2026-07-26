@@ -1,6 +1,6 @@
 {% extends "layouts/_base.html.twig" %}
 {% block app %}
-        <main class="display flex flex-col h-screen m-10">
+        <main class="display flex flex-col min-h-screen m-10">
         <section class="text-white text-lg underline hover:text-[#C2C0C0]"><a href="/stars">← Back</a></section>
         <section class="flex  justify-center my-10">
             <h3 class="text-4xl font-bold text-white">{{star.name}}</h3>
@@ -16,7 +16,7 @@
 					>{% if star.image %}<img src="{{ star.image }}" alt="{{ star.name }}" class="w-full h-full object-cover" />{% endif %}</div>
 					<section class="flex flex-col justify-between w-full">
 						<div>
-							<label class="font-bold text-white text-2xl">Size:</label>
+							<label class="font-bold text-white text-2xl">Size (km):</label>
 							<p
 								id="starType"
 								class="text-white text-lg m-4"
@@ -33,6 +33,19 @@
 								{{star.description}}
 							</p>
 						</div>
+			{% if planets|length > 0 %}
+			<section class="mt-4">
+				<h4 class="text-white font-bold text-2xl mb-4">Planets</h4>
+				<section class="grid grid-rows gap-6 mb-6">
+					{% for planet in planets %}
+						<a href="/planets/{{ planet.id }}"
+							class="block border border-white rounded-lg p-4 text-white hover:bg-white/10">
+							{{ planet.name }}
+						</a>
+					{% endfor %}
+				</section>
+			</section>
+			{% endif %}
 						<section id="buttons" class="flex justify-end gap-4 mt-4">
 							<a href="/stars/{{star.id}}/edit" class="bg-white hover:bg-[#CAC4ED] text-[#422E8F] font-bold rounded px-4 py-2">Edit</a>
 							<a href="/stars/{{star.id}}/delete" class="bg-white hover:bg-[#CAC4ED] text-[#422E8F] font-bold rounded px-4 py-2">Delete</a>
@@ -40,5 +53,6 @@
 					</section>
 				</article>
 			</section>
+
     </main>
 {% endblock %}

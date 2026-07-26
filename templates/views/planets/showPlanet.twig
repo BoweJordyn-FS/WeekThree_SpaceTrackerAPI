@@ -1,6 +1,6 @@
 {% extends "layouts/_base.html.twig" %}
 {% block app %}
-        <main class="display h-screen m-10">
+        <main class="display min-h-screen m-10">
         <section class="text-white text-lg underline hover:text-[#C2C0C0]"><a href="/planets">← Back</a></section>
         <section class="flex justify-center my-10">
             <h3 class="text-4xl font-bold text-white">{{planet.name}}</h3>
@@ -16,7 +16,7 @@
 					>{% if planet.image %}<img src="{{ planet.image }}" alt="{{ planet.name }}" class="w-full h-full object-cover" />{% endif %}</div>
 					<section class="flex flex-col justify-between w-full">
 						<div>
-							<label class="font-bold text-white text-2xl">Size:</label>
+							<label class="font-bold text-white text-2xl">Size (km):</label>
 							<p
 								id="planetType"
 								class="text-white text-lg m-4"
@@ -28,11 +28,24 @@
 							<label class="font-bold text-white text-2xl">Description:</label>
 							<p
 								id="planetDistance"
-								class="text-white text-lg m-4"
+								class="text-white text-lg m-2"
 							>
 								{{planet.description}}
 							</p>
 						</div>
+			{% if stars|length > 0 %}
+			<section class="mt-4">
+				<h4 class="text-white font-bold text-2xl mb-4">Stars</h4>
+				<section class="grid grid-rows gap-6 mb-6">
+					{% for star in stars %}
+						<a href="/stars/{{ star.id }}"
+							class="block border border-white rounded-lg p-4 text-white hover:bg-white/10">
+							{{ star.name }}
+						</a>
+					{% endfor %}
+				</section>
+			</section>
+			{% endif %}
 						<section id="buttons" class="flex justify-end gap-4 mt-4">
 							<a href="/planets/{{planet.id}}/edit" class="bg-white hover:bg-[#CAC4ED] text-[#422E8F] font-bold rounded px-4 py-2">Edit</a>
 							<a href="/planets/{{planet.id}}/delete" class="bg-white hover:bg-[#CAC4ED] text-[#422E8F] font-bold rounded px-4 py-2">Delete</a>
@@ -40,5 +53,6 @@
 					</section>
 				</article>
 			</section>
+
     </main>
 {% endblock %}

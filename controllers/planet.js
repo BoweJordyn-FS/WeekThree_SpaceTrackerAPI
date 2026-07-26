@@ -1,5 +1,10 @@
-const { Planets } = require('../models');
+const { Planets, Star } = require('../models');
 const { wantsJson, notFound } = require('../utils/respond');
+
+// Normalizes the "starIds" multi-select field into an array. A single
+// selection arrives as a plain string, multiple selections as an array,
+// and none selected omits the field entirely.
+const toIdArray = (value) => [].concat(value || []);
 
 // Show all resources
 const index = async (req, res, next) => {
@@ -26,7 +31,8 @@ const show = async (req, res, next) => {
 			planet.dataValues.stars = stars;
 			res.status(200).json(planet);
 		} else {
-			res.status(200).render('views/planets/showPlanet.twig', { planet, stars });
+			const allStars = await Star.findAll();
+			res.status(200).render('views/planets/showPlanet.twig', { planet, stars, allStars });
 		}
 	} catch (err) {
 		next(err);
@@ -34,8 +40,13 @@ const show = async (req, res, next) => {
 };
 
 // Render the form for creating a new resource
-const newForm = (req, res) => {
-	res.status(200).render('views/planets/new', { planet: {} });
+const newForm = async (req, res, next) => {
+	try {
+		const allStars = await Star.findAll();
+		res.status(200).render('views/planets/new', { planet: {}, allStars });
+	} catch (err) {
+		next(err);
+	}
 };
 
 // Render the form for editing an existing resource
@@ -43,7 +54,10 @@ const editForm = async (req, res, next) => {
 	try {
 		const planet = await Planets.findByPk(req.params.id);
 		if (!planet) return notFound(req, res, 'Planet not found');
-		res.status(200).render('views/planets/edit', { planet });
+
+		const [linkedStars, allStars] = await Promise.all([planet.getStars(), Star.findAll()]);
+		const linkedStarIds = linkedStars.map((star) => star.id);
+		res.status(200).render('views/planets/edit', { planet, allStars, linkedStarIds });
 	} catch (err) {
 		next(err);
 	}
@@ -51,18 +65,24 @@ const editForm = async (req, res, next) => {
 
 // Create a new resource
 const create = async (req, res, next) => {
-	if (!req.body.name) {
-		if (wantsJson(req)) {
-			return res.status(400).json({ error: 'name is required' });
-		}
-		return res.status(400).render('views/planets/new', {
-			planet: req.body,
-			error: 'name is required',
-		});
-	}
-
 	try {
+		if (!req.body.name) {
+			if (wantsJson(req)) {
+				return res.status(400).json({ error: 'name is required' });
+			}
+			const allStars = await Star.findAll();
+			return res.status(400).render('views/planets/new', {
+				planet: req.body,
+				allStars,
+				error: 'name is required',
+			});
+		}
+
 		const planet = await Planets.create(req.body);
+		if (req.body.starIds !== undefined) {
+			await planet.setStars(toIdArray(req.body.starIds));
+		}
+
 		// Sets a pretext "planetId" for our upload middleware
 		req.planetId = planet.id;
 		// Invoke our upload middleware with next()
@@ -85,6 +105,10 @@ const update = async (req, res, next) => {
 		if (!planet) return notFound(req, res, 'Planet not found');
 
 		await planet.update(req.body);
+		if (req.body.starIds !== undefined) {
+			await planet.setStars(toIdArray(req.body.starIds));
+		}
+
 		// Sets a pretext "planetId" for our upload middleware
 		req.planetId = planet.id;
 		// Invoke our upload middleware with next()

@@ -4,12 +4,75 @@
 		<section class="flex justify-center my-10">
 			<h3 class="text-4xl font-bold text-white">New Planet</h3>
 		</section>
-		{% include "partials/_form.html.twig" with {
-			item: planet,
-			action: "/planets",
-			method: "POST",
-			submitLabel: "Create Planet",
-			error: error
-		} %}
+		<form
+			method="POST"
+			enctype="multipart/form-data"
+			action="/planets"
+			class="flex flex-col gap-4 max-w-lg mx-auto"
+		>
+			{% if error %}
+				<p class="text-red-400 font-bold">{{ error }}</p>
+			{% endif %}
+
+			<div>
+				<label for="image" class="font-bold text-white text-2xl">Image:</label>
+				<br />
+				<input type="file" id="image" name="image" class="text-white hover:bg-[#2a29696f]" />
+			</div>
+			<div>
+				<label for="name" class="font-bold text-white text-2xl">Name:</label>
+				<input
+					type="text"
+					id="name"
+					name="name"
+					value="{{ planet.name }}"
+					class="w-full rounded p-2 text-white bg-white/10 border border-white"
+				/>
+			</div>
+
+			<div>
+				<label for="size" class="font-bold text-white text-2xl">Size (km):</label>
+				<input
+					type="number"
+					id="size"
+					name="size"
+					value="{{ planet.size }}"
+					class="w-full rounded p-2 text-white bg-white/10 border border-white"
+				/>
+			</div>
+
+			<div>
+				<label for="description" class="font-bold text-white text-2xl">Description:</label>
+				<textarea
+					id="description"
+					name="description"
+					class="w-full rounded p-2 text-white bg-white/10 border border-white"
+				>{{ planet.description }}</textarea>
+			</div>
+
+
+			<div>
+				<label for="starIds" class="font-bold text-white text-2xl">Stars:</label>
+				<select
+					id="starIds"
+					name="starIds"
+					multiple
+					class="w-full rounded p-2 text-white bg-white/10 border border-white"
+				>
+					{% for star in allStars %}
+						<option value="{{ star.id }}">{{ star.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div>
+				<button
+					type="submit"
+					class="bg-white hover:bg-[#CAC4ED] text-[#422E8F] font-bold rounded px-4 py-2"
+				>
+					Create Planet
+				</button>
+			</div>
+		</form>
 	</main>
 {% endblock %}
