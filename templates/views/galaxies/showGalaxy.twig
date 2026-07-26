@@ -1,0 +1,37 @@
+{% extends "layouts/_base.html.twig" %}
+{% block app %}
+        <main class="display h-screen m-10">
+        <div>
+            <h3>{{galaxy.name}}</h3>
+        </div>
+        <section class="display flex direction row justify-center">
+				<article
+					id="starCard"
+					class="border border-white rounded-lg p-4 items-center gap-2 w-2xl flex flex-col"
+				>
+					<div
+						id="imageBox"
+						class="w-full aspect-3/2 m-2 bg-white/10 rounded-md shrink-0"
+					></div>
+					<section class="flex flex-col justify-between w-full">
+						<p
+							id="starType"
+							class="text-white text-lg m-4"
+						>
+							{{galaxy.size}}
+						</p>
+						<p
+							id="starDistance"
+							class="text-white text-lg m-4"
+						>
+							{{galaxy.description}}
+						</p>
+						<section id="buttons">
+							<a href="/galaxies/{{galaxy.id}}/edit">edit</a>
+                        <a href="/galaxies/{{galaxy.id}}delete">delete</a>
+						</section>
+					</section>
+				</article>
+			</section>
+    </main>
+{% endblock %}

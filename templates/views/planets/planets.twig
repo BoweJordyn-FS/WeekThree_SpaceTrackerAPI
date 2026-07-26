@@ -13,7 +13,7 @@
                     {% for planet in planets %}
                     <article
                         id="planetCard"
-                        class="border border-white rounded-lg p-4 items-center gap-2 w-full max-w-sm mx-auto flex flex-col">
+                        class="relative border border-white rounded-lg p-4 items-center gap-2 w-full max-w-sm mx-auto flex flex-col">
                         <div
                             id="imageBox"
                             class="w-full aspect-3/2 m-2 bg-white/10 rounded-md shrink-0"
@@ -26,8 +26,8 @@
                             </h3>
                             <a href="/planets/{{planet.id}}/show"
                                 id="showInfo"
-                                class="font-bold text-white">
-                                ^
+                                class="font-bold text-white after:absolute after:inset-0">
+                                
                             </a>
                         </section>
                         <section
@@ -43,10 +43,10 @@
                                 class="text-white text-lg m-4">
                                 {{planet.description}}
                             </p>
-                       <a href="/planets/{{planet.id}}/edit">edit</a>
-                       <a href="/planets/{{planet.id}}/delete">delete</a>
+                       <a href="/planets/{{planet.id}}/edit" class="relative z-10">edit</a>
+                       <a href="/planets/{{planet.id}}/delete" class="relative z-10">delete</a>
                         </section>
-                        
+
                     </article>
                  {% endfor %}
  

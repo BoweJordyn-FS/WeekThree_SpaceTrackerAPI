@@ -16,6 +16,7 @@ router.get(`/new`, planetCtlr.new)
 // Added our uploadPlanetImage middleware to our create route
 router.post(`/`, planetCtlr.create, uploadPlanetImage)
 router.get(`/:id`, planetCtlr.show)
+router.get(`/:id/show`, planetCtlr.show)
 router.get(`/:id/edit`, planetCtlr.edit)
 // Added our uploadPlanetImage middleware to our update route
 router.put(`/:id`, planetCtlr.update, uploadPlanetImage)

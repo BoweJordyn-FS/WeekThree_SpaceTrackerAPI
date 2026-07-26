@@ -26,7 +26,7 @@ const show = async (req, res, next) => {
 			planet.dataValues.stars = stars;
 			res.status(200).json(planet);
 		} else {
-			res.status(200).render('views/planets/show', { planet, stars });
+			res.status(200).render('views/planets/showPlanet.twig', { planet, stars });
 		}
 	} catch (err) {
 		next(err);
@@ -55,12 +55,10 @@ const create = async (req, res, next) => {
 		if (wantsJson(req)) {
 			return res.status(400).json({ error: 'name is required' });
 		}
-		return res
-			.status(400)
-			.render('views/planets/new', {
-				planet: req.body,
-				error: 'name is required',
-			});
+		return res.status(400).render('views/planets/new', {
+			planet: req.body,
+			error: 'name is required',
+		});
 	}
 
 	try {
