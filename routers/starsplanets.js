@@ -9,9 +9,12 @@ const router = new express.Router()
 
 // RESTful resource mappings
 router.get(`/`, starsPlanetsCtlr.index)
+router.get(`/new`, starsPlanetsCtlr.new)
 router.post(`/`, starsPlanetsCtlr.create)
 router.get(`/:id`, starsPlanetsCtlr.show)
+router.get(`/:id/edit`, starsPlanetsCtlr.edit)
 router.put(`/:id`, starsPlanetsCtlr.update)
+router.patch(`/:id`, starsPlanetsCtlr.update)
 router.delete(`/:id`, starsPlanetsCtlr.remove)
 
 // export "router"

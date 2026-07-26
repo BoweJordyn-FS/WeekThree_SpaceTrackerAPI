@@ -1,49 +1,118 @@
 const { Galaxy } = require('../models');
+const { wantsJson, notFound } = require('../utils/respond');
 
 // Show all resources
-const index = async (req, res) => {
-	// Respond with an array and 2xx status code
-	const galaxies = await Galaxy.findAll();
-	res.status(200).json(galaxies);
+const index = async (req, res, next) => {
+	try {
+		const galaxies = await Galaxy.findAll();
+		if (wantsJson(req)) {
+			res.status(200).json(galaxies);
+		} else {
+			res.status(200).render('views/galaxies/index', { galaxies });
+		}
+	} catch (err) {
+		next(err);
+	}
 };
 
 // Show resource
-const show = async (req, res) => {
-	// Respond with a single object and 2xx code
-	const galaxy = await Galaxy.findByPk(req.params.id);
-	const star = await galaxy.getStars();
-	galaxy.dataValues.stars = star;
-	res.status(200).json(galaxy);
+const show = async (req, res, next) => {
+	try {
+		const galaxy = await Galaxy.findByPk(req.params.id);
+		if (!galaxy) return notFound(req, res, 'Galaxy not found');
+
+		const stars = await galaxy.getStars();
+		if (wantsJson(req)) {
+			galaxy.dataValues.stars = stars;
+			res.status(200).json(galaxy);
+		} else {
+			res.status(200).render('views/galaxies/show', { galaxy, stars });
+		}
+	} catch (err) {
+		next(err);
+	}
+};
+
+// Render the form for creating a new resource
+const newForm = (req, res) => {
+	res.status(200).render('views/galaxies/new', { galaxy: {} });
+};
+
+// Render the form for editing an existing resource
+const editForm = async (req, res, next) => {
+	try {
+		const galaxy = await Galaxy.findByPk(req.params.id);
+		if (!galaxy) return notFound(req, res, 'Galaxy not found');
+		res.status(200).render('views/galaxies/edit', { galaxy });
+	} catch (err) {
+		next(err);
+	}
 };
 
 // Create a new resource
-const create = async (req, res) => {
-	// Issue a redirect with a success 2xx code
-	const galaxy = await Galaxy.create(req.body);
-	res.redirect(201, `/galaxies/${galaxy.id}`);
+const create = async (req, res, next) => {
+	if (!req.body.name) {
+		if (wantsJson(req)) {
+			return res.status(400).json({ error: 'name is required' });
+		}
+		return res.status(400).render('views/galaxies/new', { galaxy: req.body, error: 'name is required' });
+	}
+
+	try {
+		const galaxy = await Galaxy.create(req.body);
+		// Sets a pretext "galaxyId" for our upload middleware
+		req.galaxyId = galaxy.id;
+		// Invoke our upload middleware with next()
+		next();
+
+		if (wantsJson(req)) {
+			res.status(201).json(galaxy);
+		} else {
+			res.redirect(303, `/galaxies/${galaxy.id}`);
+		}
+	} catch (err) {
+		next(err);
+	}
 };
 
 // Update an existing resource
-const update = async (req, res) => {
-	// Respond with a single resource and 2xx code
-	const galaxy = await Galaxy.update(req.body, {
-		where: {
-			id: req.params.id,
-		},
-	});
-	res.status(202).json(galaxy);
+const update = async (req, res, next) => {
+	try {
+		const galaxy = await Galaxy.findByPk(req.params.id);
+		if (!galaxy) return notFound(req, res, 'Galaxy not found');
+
+		await galaxy.update(req.body);
+		// Sets a pretext "galaxyId" for our upload middleware
+		req.galaxyId = galaxy.id;
+		// Invoke our upload middleware with next()
+		next();
+
+		if (wantsJson(req)) {
+			res.status(200).json(galaxy);
+		} else {
+			res.redirect(303, `/galaxies/${galaxy.id}`);
+		}
+	} catch (err) {
+		next(err);
+	}
 };
 
 // Remove a single resource
-const remove = async (req, res) => {
-	// Respond with a 2xx status code and bool
-	const deleted = await Galaxy.destroy({
-		where: {
-			id: req.params.id,
-		},
-	});
-	res.status(200).json(deleted);
+const remove = async (req, res, next) => {
+	try {
+		const galaxy = await Galaxy.findByPk(req.params.id);
+		if (!galaxy) return notFound(req, res, 'Galaxy not found');
+
+		await galaxy.destroy();
+		if (wantsJson(req)) {
+			res.status(200).json({ id: galaxy.id, deleted: true });
+		} else {
+			res.redirect(303, '/galaxies');
+		}
+	} catch (err) {
+		next(err);
+	}
 };
 
 // Export all controller actions
-module.exports = { index, show, create, update, remove };
+module.exports = { index, show, new: newForm, edit: editForm, create, update, remove };

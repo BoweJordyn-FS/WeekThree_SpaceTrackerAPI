@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Space Tracker | {% block title %} Welcome {% endblock %}</title>
+        <link rel="stylesheet" href="/stylesheets/tailwind.css">
+    </head>
+    <body class="bg-linear-to-r from-[#102142] to-[#422E8F]">
+        {% include "partials/_header.html.twig" %}
+        <main id="app">
+        {% block app %}{% endblock %}
+        </main>
+        {% include "partials/_footer.html.twig" %}
+    </body>
+    <footer>
+    </footer>
+</html>

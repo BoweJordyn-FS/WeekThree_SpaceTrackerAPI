@@ -4,15 +4,23 @@ const express = require(`express`)
 // Load in our controller/action instances
 const galaxyCtlr = require(`../controllers/galaxy.js`)
 
+// Loading in our image upload middleware
+const { uploadGalaxyImage } = require(`../middlewares`)
+
 // Create a new Router instance and call it "router"
 const router = new express.Router()
 
 // RESTful resource mappings
 router.get(`/`, galaxyCtlr.index)
-router.post(`/`, galaxyCtlr.create)
-router.get(`/:id`, galaxyCtlr.show) 
-router.put(`/:id`, galaxyCtlr.update) 
-router.delete(`/:id`, galaxyCtlr.remove) 
+router.get(`/new`, galaxyCtlr.new)
+// Added our uploadGalaxyImage middleware to our create route
+router.post(`/`, galaxyCtlr.create, uploadGalaxyImage)
+router.get(`/:id`, galaxyCtlr.show)
+router.get(`/:id/edit`, galaxyCtlr.edit)
+// Added our uploadGalaxyImage middleware to our update route
+router.put(`/:id`, galaxyCtlr.update, uploadGalaxyImage)
+router.patch(`/:id`, galaxyCtlr.update, uploadGalaxyImage)
+router.delete(`/:id`, galaxyCtlr.remove)
 
 // export "router"
 module.exports = router
