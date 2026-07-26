@@ -26,7 +26,7 @@ const show = async (req, res, next) => {
 			galaxy.dataValues.stars = stars;
 			res.status(200).json(galaxy);
 		} else {
-			res.status(200).render('views/galaxies/show', { galaxy, stars });
+			res.status(200).render('views/galaxies/showGalaxy.twig', { galaxy, stars });
 		}
 	} catch (err) {
 		next(err);
