@@ -8,7 +8,7 @@ const index = async (req, res, next) => {
 		if (wantsJson(req)) {
 			res.status(200).json(planets);
 		} else {
-			res.status(200).render('views/planets/index', { planets });
+			res.status(200).render('views/planets/planets.twig', { planets });
 		}
 	} catch (err) {
 		next(err);
@@ -55,7 +55,12 @@ const create = async (req, res, next) => {
 		if (wantsJson(req)) {
 			return res.status(400).json({ error: 'name is required' });
 		}
-		return res.status(400).render('views/planets/new', { planet: req.body, error: 'name is required' });
+		return res
+			.status(400)
+			.render('views/planets/new', {
+				planet: req.body,
+				error: 'name is required',
+			});
 	}
 
 	try {
@@ -115,4 +120,12 @@ const remove = async (req, res, next) => {
 };
 
 // Export all controller actions
-module.exports = { index, show, new: newForm, edit: editForm, create, update, remove };
+module.exports = {
+	index,
+	show,
+	new: newForm,
+	edit: editForm,
+	create,
+	update,
+	remove,
+};

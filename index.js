@@ -3,7 +3,6 @@ const express = require(`express`);
 const app = express();
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
-const methodOverride = require('method-override');
 
 // Load twig and path modules for rendering our home page
 const twig = require('twig');
@@ -23,18 +22,6 @@ app.use(bodyParser.json());
 
 // parse multipart/form-data (file uploads) and populate req.files / req.body
 app.use(fileUpload());
-
-// Allow HTML forms (which only support GET/POST) to issue PUT/PATCH/DELETE
-// via a hidden "_method" field, e.g. <input type="hidden" name="_method" value="DELETE">
-app.use(
-	methodOverride((req) => {
-		if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-			const method = req.body._method;
-			delete req.body._method;
-			return method;
-		}
-	}),
-);
 
 // Serve uploaded images and any other static assets from /public
 app.use(express.static(path.join(__dirname, 'public')));

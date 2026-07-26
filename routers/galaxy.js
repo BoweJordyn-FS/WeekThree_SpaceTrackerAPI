@@ -19,8 +19,12 @@ router.get(`/:id`, galaxyCtlr.show)
 router.get(`/:id/edit`, galaxyCtlr.edit)
 // Added our uploadGalaxyImage middleware to our update route
 router.put(`/:id`, galaxyCtlr.update, uploadGalaxyImage)
-router.patch(`/:id`, galaxyCtlr.update, uploadGalaxyImage)
 router.delete(`/:id`, galaxyCtlr.remove)
+
+// HTML5-specific routes: browsers can only send GET/POST, so plain HTML
+// forms and links use these instead of PUT/DELETE
+router.post(`/:id`, galaxyCtlr.update, uploadGalaxyImage)
+router.get(`/:id/delete`, galaxyCtlr.remove)
 
 // export "router"
 module.exports = router

@@ -1,0 +1,59 @@
+{% extends "layouts/_base.html.twig" %}
+{% block app %}
+<main class="display h-screen m-10">
+			<section class="flex flex-row items-center justify-between mx-2">
+				<h2 class="text-white font-bold text-5xl m-8">Stars</h2>
+				<button
+					class="bg-white hover:bg-[#CAC4ED] text-[#422E8F] font-bold rounded px-4 py-2"
+				>
+					+ Add Star
+				</button>
+			</section>
+			<section
+				class="grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-8 mx-8">
+                {% for star in stars %}
+				<article
+					id="starCard"
+					class="border border-white rounded-lg p-4 items-center gap-2 w-full max-w-sm mx-auto flex flex-col"
+				>
+					<div
+						id="imageBox"
+						class="w-full aspect-3/2 m-2 bg-white/10 rounded-md shrink-0"
+					></div>
+					<section class="flex items-center justify-between w-full">
+						<h3
+							id="starName"
+							class="text-white font-bold text-xl"
+						>
+							{{star.name}}
+						</h3>
+						  <a href="/stars/{{star.id}}"
+                                id="showInfo"
+                                class="font-bold text-white">
+                                ^
+                            </a>
+					</section>
+					<section
+						id="starDetails"
+						class="hidden text-center"
+					>
+						<p
+							id="starType"
+							class="text-white text-lg m-4"
+						>
+							{{star.size}}
+						</p>
+						<p
+							id="starDistance"
+							class="text-white text-lg m-4"
+						>
+							{{star.distance}}
+						</p>
+                         <a href="/stars/{{star.id}}/edit">edit</a>
+                       ``<a href="/stars/{{star.id}}/delete">delete</a>
+					</section>
+				</article>
+			{% endfor %}
+			</section>
+		</main>
+{% endblock %}

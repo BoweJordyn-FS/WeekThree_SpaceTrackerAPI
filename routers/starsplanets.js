@@ -14,8 +14,12 @@ router.post(`/`, starsPlanetsCtlr.create)
 router.get(`/:id`, starsPlanetsCtlr.show)
 router.get(`/:id/edit`, starsPlanetsCtlr.edit)
 router.put(`/:id`, starsPlanetsCtlr.update)
-router.patch(`/:id`, starsPlanetsCtlr.update)
 router.delete(`/:id`, starsPlanetsCtlr.remove)
+
+// HTML5-specific routes: browsers can only send GET/POST, so plain HTML
+// forms and links use these instead of PUT/DELETE
+router.post(`/:id`, starsPlanetsCtlr.update)
+router.get(`/:id/delete`, starsPlanetsCtlr.remove)
 
 // export "router"
 module.exports = router
